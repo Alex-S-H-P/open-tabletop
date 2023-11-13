@@ -19,5 +19,3 @@ from open_tabletop.back.elements import BaseElement
 
 class Dictionary(BaseModel):
     elements: dict[str, BaseElement]
-
-
