@@ -56,7 +56,3 @@ class Place(BaseElement):
 
 class Image(BaseElement):
     path: Path
-
-    @model_serializer
-    def ser_image(self) -> Dict[str, Any]:
-        ...
