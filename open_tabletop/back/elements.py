@@ -14,9 +14,8 @@
 # Author: Alex SHP <alex.shp38540@gmail.com>
 from datetime import date
 from pathlib import Path
-from typing import Dict, Any
 
-from pydantic import BaseModel, field_serializer, model_serializer
+from pydantic import BaseModel, field_serializer
 
 from open_tabletop.back.labels import Label
 

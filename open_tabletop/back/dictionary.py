@@ -80,7 +80,7 @@ class Dictionary(BaseModel):
             return _filter(element, label)
 
         with Pool(processes, ) as p:
-            filtered: tuple[str, BaseElement] | None
+            filtered: tuple[str, BaseElement] | None  # noqa: F842
             return {
                 filtered[0]: filtered[1]
                 for filtered in
