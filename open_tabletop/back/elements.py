@@ -38,7 +38,7 @@ class BaseElement(BaseModel):
         return __date.isoformat()
 
 
-class Connexion(BaseElement):
+class Connection(BaseElement):
     ...
 
 
