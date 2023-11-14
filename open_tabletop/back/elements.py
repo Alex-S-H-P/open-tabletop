@@ -27,10 +27,11 @@ class Description(BaseModel):
 
 class BaseElement(BaseModel):
     name: str
-    creation_date: date
-    destruction_date: date
     labels: list[Label]
     description: Description
+
+    creation_date: date = date.min
+    destruction_date: date = date.max
 
     @field_serializer('creation_date', 'destruction_date')
     def serialize_date_creation(self, __date: date):
