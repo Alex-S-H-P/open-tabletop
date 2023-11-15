@@ -105,6 +105,7 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
+coverage.*
 .cache
 nosetests.xml
 coverage.xml
@@ -222,3 +223,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+
+# VsCode
+# VsCode specific template.
+.vscode/
