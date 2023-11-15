@@ -17,33 +17,33 @@ from multiprocess import Pool
 from typing import Literal, get_args, Callable, Any
 from pydantic import BaseModel
 
-from open_tabletop.back.elements import BaseElement
+from open_tabletop.back.elements import Element
 from open_tabletop.back.labels import Label
 
 ORDERS_T = Literal['creation date', 'destruction date', 'number labels', 'name',]
 
 
-def _filter(element: tuple[str, BaseElement], label: Label) -> tuple[str, BaseElement] | None:
+def _filter(element: tuple[str, Element], label: Label) -> tuple[str, Element] | None:
     return element if any(el_label == label for el_label in element[1].labels) else None
 
 
-def _comp_creation_date(element: BaseElement) -> date:
+def _comp_creation_date(element: Element) -> date:
     return element.creation_date
 
 
-def _comp_destruction_date(element: BaseElement) -> date:
+def _comp_destruction_date(element: Element) -> date:
     return element.destruction_date
 
 
-def _comp_name(element: BaseElement) -> str:
+def _comp_name(element: Element) -> str:
     return element.name
 
 
-def _comp_num_labels(element: BaseElement) -> int:
+def _comp_num_labels(element: Element) -> int:
     return len(element.labels)
 
 
-def get_comp_func(order: ORDERS_T) -> Callable[[BaseElement], Any]:
+def get_comp_func(order: ORDERS_T) -> Callable[[Element], Any]:
     if order == 'creation date':
         return _comp_creation_date
     elif order == 'name':
@@ -57,9 +57,9 @@ def get_comp_func(order: ORDERS_T) -> Callable[[BaseElement], Any]:
 
 
 class Dictionary(BaseModel):
-    elements: dict[str, BaseElement]
+    elements: dict[str, Element]
 
-    def filter(self, label: Label, processes: int = 5, pre: dict[str, BaseElement] = None) -> dict[str, BaseElement]:
+    def filter(self, label: Label, processes: int = 5, pre: dict[str, Element] = None) -> dict[str, Element]:
         """
         Filters the element in the dictionary by a label
 
@@ -68,7 +68,7 @@ class Dictionary(BaseModel):
         :param processes: The number of processes to be used for multiprocessing purposes. Defaults to 5
         :param pre: an optional dictionary of {name: element pairs}.
             If not given, defaults to the elements of the dictionary. Use this for chaining filtrations.
-        :return: The filtered dictionary, as a dict[str, BaseElement].
+        :return: The filtered dictionary, as a dict[str, Element].
             It can be used as the "pre" key-word argument in another filter() or order() call
         """
         if pre is None:
@@ -76,11 +76,11 @@ class Dictionary(BaseModel):
         else:
             items = pre.items()
 
-        def filtration_wrapper(element: tuple[str, BaseElement]):
+        def filtration_wrapper(element: tuple[str, Element]):
             return _filter(element, label)
 
         with Pool(processes, ) as p:
-            filtered: tuple[str, BaseElement] | None  # noqa: F842
+            filtered: tuple[str, Element] | None  # noqa: F842
             return {
                 filtered[0]: filtered[1]
                 for filtered in
@@ -88,7 +88,7 @@ class Dictionary(BaseModel):
                 if filtered is not None
             }
 
-    def order_by(self, order: ORDERS_T, pre: dict[str, BaseElement] | None = None, reverse=False) -> list[BaseElement]:
+    def order_by(self, order: ORDERS_T, pre: dict[str, Element] | None = None, reverse=False) -> list[Element]:
         """
         Orders the dictionary by a field.
 
@@ -118,6 +118,6 @@ class Dictionary(BaseModel):
         else:
             values = pre.values()
 
-        comparison_function: Callable[[BaseElement], Any] = get_comp_func(order)
+        comparison_function: Callable[[Element], Any] = get_comp_func(order)
 
         return sorted(values, key=comparison_function, reverse=reverse)

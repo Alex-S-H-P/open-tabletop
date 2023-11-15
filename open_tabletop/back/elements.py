@@ -17,6 +17,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, field_serializer
 
+from open_tabletop.back.core import BaseElement
 from open_tabletop.back.labels import Label
 
 
@@ -24,8 +25,7 @@ class Description(BaseModel):
     raw_text: str
 
 
-class BaseElement(BaseModel):
-    name: str
+class Element(BaseElement):
     labels: list[Label]
     description: Description
 

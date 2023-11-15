@@ -18,7 +18,7 @@ from typing import get_args, Callable
 import pytest
 
 from open_tabletop.back.dictionary import get_comp_func, ORDERS_T, Dictionary
-from open_tabletop.back.elements import BaseElement, Description
+from open_tabletop.back.elements import Element, Description
 from open_tabletop.back.labels import DirectLabel
 
 
@@ -26,10 +26,10 @@ def test_comp_get():
     today = date.today()
     yesterday = today - timedelta(days=1)
     tomorrow = today + timedelta(days=1)
-    Before = BaseElement(name='a', labels=[],
+    Before = Element(name='a', labels=[],
                          description=Description(raw_text='a'),
                          creation_date=yesterday, destruction_date=today)
-    After = BaseElement(name='z', labels=[DirectLabel(name='test')],
+    After = Element(name='z', labels=[DirectLabel(name='test')],
                         description=Description(raw_text='z'),
                         creation_date=today, destruction_date=tomorrow)
     for arg in get_args(ORDERS_T):
